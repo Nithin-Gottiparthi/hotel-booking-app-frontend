@@ -1,27 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import logo from "../../assets/branding/logo.png";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
-    <header className="bg-white shadow">
-      <div className="max-w-6xl mx-auto p-4 flex items-center justify-between">
-        <Link to="/" className="font-bold text-xl">
-          HotelBooking
+    <header className="bg-white border-b">
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        {/* Brand */}
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logo} alt="Vibestey" className="h-9 w-auto" />
         </Link>
 
-        <nav className="flex gap-4 items-center">
-          <Link to="/hotels">Hotels</Link>
-          <Link to="/about">About</Link>
+        {/* Links */}
+        <nav className="hidden md:flex items-center gap-7 text-sm text-vib-muted">
+          <MenuLink to="/">Home</MenuLink>
+          <MenuLink to="/hotels">Rooms</MenuLink>
+          <MenuLink to="/about">About Us</MenuLink>
+        </nav>
 
+        {/* Auth */}
+        <div className="flex items-center gap-3">
           {!user ? (
             <>
-              <Link to="/login" className="px-3 py-1 border rounded">
-                Login
+              <Link to="/login" className="text-sm text-vib-muted hover:text-vib-purple">
+                Log In
               </Link>
-              <Link to="/signup" className="px-3 py-1 bg-black text-white rounded">
-                Signup
+              <Link
+                to="/hotels"
+                className="px-4 py-2 rounded-lg border border-vib-border hover:bg-gray-50 text-sm font-medium"
+              >
+                Rent a Room
               </Link>
             </>
           ) : (
@@ -29,22 +45,41 @@ export default function Navbar() {
               {user.role === "ADMIN" && (
                 <Link
                   to="/admin"
-                  className="px-3 py-1 border rounded bg-gray-50"
+                  className="text-sm px-3 py-2 rounded-lg border border-vib-border hover:bg-gray-50"
                 >
                   Admin Panel
                 </Link>
               )}
 
-              <Link to="/dashboard">Dashboard</Link>
-              <Link to="/my-bookings">My Bookings</Link>
+              <Link to="/dashboard" className="text-sm text-vib-muted hover:text-vib-purple">
+                Dashboard
+              </Link>
 
-              <button onClick={logout} className="px-3 py-1 border rounded">
+              <button
+                onClick={handleLogout}
+                className="text-sm px-4 py-2 rounded-lg bg-vib-purple text-white hover:bg-vib-purpleDark"
+              >
                 Logout
               </button>
             </>
           )}
-        </nav>
+        </div>
       </div>
     </header>
+  );
+}
+
+function MenuLink({ to, children }) {
+  return (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `hover:text-vib-purple transition ${
+          isActive ? "text-vib-purple font-semibold" : ""
+        }`
+      }
+    >
+      {children}
+    </NavLink>
   );
 }
