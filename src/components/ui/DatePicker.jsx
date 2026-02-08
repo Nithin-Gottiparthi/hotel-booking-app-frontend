@@ -1,17 +1,16 @@
-// Reusable Input Component
+// Date Picker Component (UI only, using HTML date input)
 
-export default function Input({
+export default function DatePicker({
     label,
-    type = 'text',
     name,
     value,
     onChange,
-    placeholder = '',
+    min,
+    max,
     required = false,
     disabled = false,
     error = '',
-    className = '',
-    ...props
+    className = ''
 }) {
     return (
         <div className={`flex flex-col gap-1 ${className}`}>
@@ -24,11 +23,12 @@ export default function Input({
 
             <input
                 id={name}
-                type={type}
+                type="date"
                 name={name}
                 value={value}
                 onChange={onChange}
-                placeholder={placeholder}
+                min={min}
+                max={max}
                 required={required}
                 disabled={disabled}
                 className={`
@@ -37,7 +37,6 @@ export default function Input({
           disabled:bg-gray-100 disabled:cursor-not-allowed
           ${error ? 'border-red-500' : 'border-gray-300'}
         `}
-                {...props}
             />
 
             {error && (

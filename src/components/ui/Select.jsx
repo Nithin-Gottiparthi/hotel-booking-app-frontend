@@ -1,17 +1,16 @@
-// Reusable Input Component
+// Reusable Select Component
 
-export default function Input({
+export default function Select({
     label,
-    type = 'text',
     name,
     value,
     onChange,
-    placeholder = '',
+    options = [],
+    placeholder = 'Select an option',
     required = false,
     disabled = false,
     error = '',
-    className = '',
-    ...props
+    className = ''
 }) {
     return (
         <div className={`flex flex-col gap-1 ${className}`}>
@@ -22,23 +21,30 @@ export default function Input({
                 </label>
             )}
 
-            <input
+            <select
                 id={name}
-                type={type}
                 name={name}
                 value={value}
                 onChange={onChange}
-                placeholder={placeholder}
                 required={required}
                 disabled={disabled}
                 className={`
-          px-4 py-2 border rounded-lg
+          px-4 py-2 border rounded-lg bg-white
           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
           disabled:bg-gray-100 disabled:cursor-not-allowed
           ${error ? 'border-red-500' : 'border-gray-300'}
         `}
-                {...props}
-            />
+            >
+                <option value="">{placeholder}</option>
+                {options.map((option) => (
+                    <option
+                        key={option.value}
+                        value={option.value}
+                    >
+                        {option.label}
+                    </option>
+                ))}
+            </select>
 
             {error && (
                 <span className="text-sm text-red-500">{error}</span>
